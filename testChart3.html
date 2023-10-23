@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q值收敛动态可视化</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chart-container {
+            width: 80%;
+            height: 480px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Q值收敛动态可视化</h1>
+    <div id="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        const trials = 100;
+        const machines = 3;
+        const trueRewards = [0.7, 0.5, 0.3];
+        let qValues = new Array(machines).fill(0);
+
+        const colors = ['rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 205, 86, 1)'];
+        const bgColors = ['rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)'];
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(trials).fill("").map((_, i) => i + 1),
+                datasets: Array(machines).fill(null).map((_, idx) => {
+                    return {
+                        label: '赌博机 ' + (idx + 1),
+                        data: [],
+                        backgroundColor: bgColors[idx],
+                        borderColor: colors[idx],
+                        borderWidth: 1
+                    };
+                })
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks:{
+                            color:'blue',
+                            maxRotation: 90,
+        minRotation: 90
+                        },
+                        title:{
+                        display:true,
+                        align:'end',
+                        text:'Q值'
+                    },
+                        grid: {
+                        color: 'rgba(0,56,99,0.5)', // 改变x轴网格线颜色
+                    }
+                    },
+                    x:{
+                        ticks:{
+                            color:'red'
+                        }
+                    }
+                },
+                plugins: {
+            legend: {
+                labels: {
+                    color: 'yellow' // 更改图例标签的颜色
+                }
+            }
+        },
+            },
+      
+        });
+
+        function addData(chart, data, machineIdx) {
+            chart.data.datasets[machineIdx].data.push(data);
+            chart.update();
+        }
+
+        function performTrial(trialNumber) {
+            if (trialNumber > trials) {
+                return;
+            }
+
+            for (let i = 0; i < machines; i++) {
+                const reward = Math.random() < trueRewards[i] ? 1 : 0;
+                qValues[i] += (reward - qValues[i]) / trialNumber;
+                addData(myChart, qValues[i], i);
+            }
+
+            setTimeout(() => {
+                performTrial(trialNumber + 1);
+            }, 80);
+        }
+        performTrial(1);
+    </script>
+</body>
+</html>
