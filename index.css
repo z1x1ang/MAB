@@ -1,0 +1,67 @@
+body{
+    margin: 30px;
+    background-color: #0E0E0E;
+    color: #F3F3F3;
+}
+h4{
+    display: inline-block;
+    margin: 5px;
+}
+td{
+    border: 1px solid rgb(186, 8, 240);
+}
+table{
+    margin-left: auto;
+    margin-right: auto;
+}
+input{
+    width:5%;
+}
+
+#chart-container {
+    width: 80%;
+    height: 480px;
+    margin: auto;
+}
+.middle{
+    margin-top: 20px;
+    text-align: center;
+}
+.cube{
+    position: relative;
+    display: inline-flex; /* 使用 flex 布局 */
+    flex-direction: column; /* 垂直排列内容 */
+    justify-content: center; /* 在容器中垂直居中对齐内容 */
+    align-items: center; /* 在容器中水平居中对齐内容 */
+    height: 100px;
+    width: 100px;
+    margin: 8px;
+    border-radius: 25px;
+}
+.bottom h3,.bottom input{
+    margin-top:20px;
+    display: inline-block;
+    margin:5px;
+}
+.probability{
+    font-size: small;
+}
+
+.flash {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 110px;
+    height: 110px;
+    border: 2px solid rgb(255, 255, 255);
+    animation: flash 0.5s alternate infinite;
+    border-radius: 10px;
+  }
+  @keyframes flash {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RL:多臂赌博机</title>
+    <!-- 引入math.js cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- 引入jquery cdn -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <!-- 引入chart.js cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 引入Chart.js库 -->
+</head>
+<body>
+    <div style="text-align: center;"><h1 style="display: inline;">10臂赌博机模拟测试<p style="font-size: 16px;display: inline;">(ε-贪婪策略)</p></h1></div>
+    <div class="middle">
+        <div class="cube" style="border: 2px solid red;">1号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(27, 172, 70);">2号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(80, 32, 211);">3号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(255, 0, 170);">4号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(0, 255, 200);">5号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(140, 5, 167);">6号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(255, 255, 255);">7号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(139, 92, 92);">8号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(68, 140, 207);">9号机<div class="probability"></div></div>
+        <div class="cube" style="border: 2px solid rgb(98, 190, 118);">10号机<div class="probability"></div></div>
+    </div>
+    <div class="bottom">
+        <h3>输入ε:</h3>
+        <input id="epsilonI"type="number" placeholder="0~1之间" min="0" max="1" step="0.01" title="注意:当ε和step都设置很小时,有可能出现有些机器探测不到的情况,进而影响最终结果">
+        <h3>输入训练步数step:</h3>
+        <input id="numstep"type="number" min="1" title="注意:当ε和step都设置较小时,有可能出现有些机器探测不到的情况,进而影响最终结果">
+        <button class="show">展示效果</button>
+        <h4>实际最优赌博机(获奖概率最高):<h4 class="oa" style="color: red;"></h4></h4>
+        <h4>估计最优赌博机(通过估值函数获得(argmax(Q))):<h4 class="eoa" style="color: red;"></h4></h4>
+    </div>
+      <div id="chart-container">
+        <canvas id="myChart"></canvas>
+      </div>
+      <div class="formula-explanation">
+        <ul>
+            <li>
+                \[
+                Q_{n+1} = \frac{1}{n} \sum_{i=1}^{n} R_i
+                \]
+            </li>
+            <li>
+                \[
+                Q_{n+1} = \frac{1}{n} (R_n + \sum_{i=1}^{n-1} R_i)
+                \]
+            </li>
+            <li>
+                \[
+                Q_{n+1} = \frac{1}{n} (R_n + (n - 1) \frac{1}{n-1} \sum_{i=1}^{n-1} R_i)
+                \]
+            </li>
+            <li>
+                \[
+                Q_{n+1} = \frac{1}{n} (R_n + (n - 1) Q_n)
+                \]
+            </li>
+            <li>
+                \[
+                Q_{n+1} = \frac{1}{n} (R_n + n Q_n - Q_n)
+                \]
+            </li>
+            <li>
+                \[
+                Q_{n+1} = Q_n + \frac{1}{n} (R_n - Q_n)
+                \]
+            </li>
+        </ul>
+        <p>\(Q_{n+1}\) :基于新观测值 \(R_n\) 的新平均值，\(Q_n\) :前 \(n-1\) 个观测值的平均值，\(\frac{1}{n} (R_n - Q_n)\) :新观测值与旧平均值之间差异的校正项。</p>
+        <p>总结:此方法使得能够在不需要存储所有样本历史的情况下连续更新和计算新的平均值，在计算资源有限或样本数量非常大的情况下特别有用。</p>
+    </div>
+    <script src="index2.js"></script>
+</body>
+</html>
